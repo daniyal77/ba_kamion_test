@@ -14,6 +14,7 @@ class BrandResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        //todo براساس فرانت اطلاعات رو بده
         return parent::toArray($request);
     }
 }
