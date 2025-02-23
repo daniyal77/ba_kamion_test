@@ -1,0 +1,41 @@
+version: "3.8"
+
+networks:
+ mysql_dbnet:
+    external: true
+ laravel:
+   driver: bridge
+
+
+services:
+  nginx:
+    container_name: cafearz-nginx
+    depends_on:
+      - php
+    networks:
+      - laravel
+      - mysql_dbnet
+
+
+    image: nginx:stable-alpine
+    ports:
+      - "8000:80"
+    tty: true
+    volumes:
+      - ./:/var/www/html
+      - ./docker/cafearz.conf:/etc/nginx/conf.d/default.conf
+  php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: cafearz-php
+    working_dir: /var/www/html
+    networks:
+      - laravel
+      - mysql_dbnet
+
+
+    volumes:
+      - ./:/var/www/html
+      - ./docker/cafearz.ini:/usr/local/etc/php/conf.d/laravel.ini
+
